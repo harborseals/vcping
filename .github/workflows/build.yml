@@ -1,0 +1,25 @@
+name: Build Docker images
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          token: "${{ github.token }}"
+      - name: Build and push Docker image
+        uses: whoan/docker-build-with-cache-action@v5
+        with:
+          registry: ghcr.io
+          username: "${{ github.repository_owner }}"
+          password: "${{ github.token }}"
+          image_name: vcping
